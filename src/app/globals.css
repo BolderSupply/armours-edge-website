@@ -1,0 +1,359 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #ffffff;
+  --color-mist: #f2f5f1;
+  --color-sage: #dde7de;
+  --color-sand: #d3dccf;
+  --color-ink: #14201a;
+  --color-evergreen: #1d5638;
+  --color-evergreen-deep: #0e3022;
+  --color-moss: #3f7a52;
+  --color-amber: #e3902c;
+  --color-amber-deep: #c77614;
+  --color-granite: #54625a;
+  --color-line: #d4dcd4;
+
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-variation-settings: "wdth" 92;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings: "wdth" 106;
+  letter-spacing: 0;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-amber);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--color-evergreen);
+  color: var(--color-paper);
+}
+
+.container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 76rem;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px) {
+  .container-page {
+    padding-inline: 2rem;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Buttons: a colour sweep from the left on hover                      */
+/* ------------------------------------------------------------------ */
+.btn {
+  --sweep: var(--color-evergreen-deep);
+  --text: var(--color-paper);
+  --text-hover: var(--color-paper);
+  --bg: var(--color-evergreen);
+  --border: var(--color-evergreen);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem 1.75rem;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 104;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--sweep);
+  transform: translateX(-101%);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.btn:hover,
+.btn:focus-visible {
+  color: var(--text-hover);
+}
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: none;
+}
+.btn-amber {
+  --bg: var(--color-amber);
+  --border: var(--color-amber);
+  --text: var(--color-ink);
+  --sweep: var(--color-paper);
+  --text-hover: var(--color-ink);
+}
+.btn-solid {
+  --sweep: var(--color-amber);
+  --text-hover: var(--color-ink);
+  --border: var(--color-evergreen);
+}
+.btn-line {
+  --bg: transparent;
+  --text: var(--color-evergreen);
+  --sweep: var(--color-evergreen);
+  --text-hover: var(--color-paper);
+}
+.btn-ghost-light {
+  --bg: transparent;
+  --border: rgb(255 255 255 / 0.85);
+  --text: var(--color-paper);
+  --sweep: var(--color-paper);
+  --text-hover: var(--color-evergreen-deep);
+}
+
+.text-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 2px;
+  padding-bottom: 2px;
+  transition: background-size 0.35s var(--ease-out-expo);
+}
+.text-link:hover {
+  background-size: 0% 2px;
+  background-position: 100% 100%;
+}
+
+/* ------------------------------------------------------------------ */
+/* Scroll reveal (see components/Reveal.tsx)                           */
+/* ------------------------------------------------------------------ */
+.js [data-reveal] {
+  opacity: 0;
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.js [data-reveal="up"] {
+  transform: translateY(36px);
+}
+.js [data-reveal="left"] {
+  transform: translateX(-48px);
+}
+.js [data-reveal="right"] {
+  transform: translateX(48px);
+}
+.js [data-reveal="scale"] {
+  transform: scale(0.94);
+}
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Line drawings: strokes draw themselves in when scrolled into view */
+.js [data-reveal="draw"] {
+  opacity: 1;
+}
+.js [data-reveal="draw"] path,
+.js [data-reveal="draw"] line,
+.js [data-reveal="draw"] circle {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 2.6s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 140ms);
+}
+.js [data-reveal="draw"].is-visible path,
+.js [data-reveal="draw"].is-visible line,
+.js [data-reveal="draw"].is-visible circle {
+  stroke-dashoffset: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero: words rise one by one, supporting copy fades in               */
+/* ------------------------------------------------------------------ */
+@keyframes word-rise {
+  from {
+    transform: translateY(112%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes kenburns {
+  from {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-240px, -88px, 0);
+  }
+}
+@keyframes bar-grow {
+  from {
+    width: 0;
+  }
+  to {
+    width: 6rem;
+  }
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.hero-word > span {
+  display: inline-block;
+  animation: word-rise 1s var(--ease-out-expo) both;
+  animation-delay: calc(var(--i) * 90ms + 200ms);
+}
+.hero-fade {
+  animation: fade-rise 1s var(--ease-out-expo) both;
+  animation-delay: var(--d, 800ms);
+}
+.kenburns {
+  animation: kenburns 26s ease-out both;
+}
+.drift {
+  animation: drift 70s linear infinite;
+}
+.bar-grow {
+  height: 4px;
+  background: var(--color-amber);
+  animation: bar-grow 1.4s var(--ease-out-expo) 1.1s both;
+}
+.menu-item {
+  animation: menu-in 0.6s var(--ease-out-expo) both;
+  animation-delay: calc(var(--i) * 60ms + 80ms);
+}
+
+/* Parallax drift for banner photos where the browser supports scroll timelines */
+@keyframes parallax {
+  from {
+    transform: translateY(-9%) scale(1.18);
+  }
+  to {
+    transform: translateY(9%) scale(1.18);
+  }
+}
+@supports (animation-timeline: view()) {
+  .parallax {
+    animation: parallax linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+}
+
+/* Cards: photo zooms, caption slides up */
+.lift {
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    box-shadow 0.5s var(--ease-out-expo);
+}
+.lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 40px -22px rgb(14 48 34 / 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  .js [data-reveal="draw"] path,
+  .js [data-reveal="draw"] line,
+  .js [data-reveal="draw"] circle {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Long-form text from Sanity */
+.prose-story p + p {
+  margin-top: 1.1em;
+}
+.prose-story h3 {
+  margin-top: 1.6em;
+  margin-bottom: 0.5em;
+  font-size: 1.35rem;
+}
+.prose-story ul {
+  margin-top: 1em;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+.prose-story li + li {
+  margin-top: 0.4em;
+}

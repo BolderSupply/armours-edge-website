@@ -43,7 +43,7 @@ export function Header({ contact }: { contact: Contact }) {
       >
         <div className="container-page flex h-11 items-center justify-between gap-4 text-sm">
           <p className="hidden truncate text-sand sm:block">
-            {contact.serviceArea ? contact.serviceArea : "Landscape and hardscape construction"}
+            Proudly serving {contact.serviceArea}
           </p>
           <div className="ml-auto flex items-center gap-5">
             {contact.phone ? (

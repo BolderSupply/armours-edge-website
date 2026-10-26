@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
@@ -15,7 +16,8 @@ const team = [
   {
     name: "Kyle Somani",
     role: "Owner and operator",
-    initials: "KS",
+    photo: "/team/kyle-somani.webp",
+    photoSize: [888, 1200],
     bio: [
       "Kyle's passion for landscape construction began in 2017. He started as a labourer for Clintar Kitchener in the summers while studying criminal justice at the University of Guelph. When he finished his degree, he realised landscape construction was his true calling.",
       "He has worked at Clintar ever since and was groomed by his mentors into a foreman for landscape construction and a supervisor for winter operations. Kyle has always had an entrepreneurial mindset and believes the recipe for success is a strong company culture, attention to detail and strong relationships with clients.",
@@ -25,7 +27,8 @@ const team = [
   {
     name: "John Trollope",
     role: "Head foreman and operations manager",
-    initials: "JT",
+    photo: "/team/john-trollope.webp",
+    photoSize: [900, 1107],
     bio: [
       "John started his career in golf course construction in 2000. In 2005 he moved into residential and commercial landscape construction and started A & T Landscaping.",
       "He has worked on projects of every scope and size, and with 24 years of experience he can help you turn any vision into reality. John spends his spare time on the golf course or with his two kids, Kira and Ashton.",
@@ -55,6 +58,9 @@ export default function AboutPage() {
             Our goal is to build long-term relationships with our clients through the crafting of sustainable
             landscapes.
           </p>
+          <p className="mt-6 text-lg text-granite">
+            We are proud to serve the whole Waterloo Region.
+          </p>
         </Reveal>
       </section>
 
@@ -67,17 +73,19 @@ export default function AboutPage() {
             {team.map((person, i) => (
               <Reveal key={person.name} delay={i * 120}>
                 <article>
-                  <div className="flex items-center gap-5">
-                    <span
-                      aria-hidden="true"
-                      className="flex h-20 w-20 shrink-0 items-center justify-center bg-evergreen font-display text-2xl font-extrabold tracking-wide text-paper"
-                    >
-                      {person.initials}
-                    </span>
-                    <div>
-                      <h3 className="text-3xl">{person.name}</h3>
-                      <p className="mt-1 font-display text-base font-semibold text-moss">{person.role}</p>
-                    </div>
+                  <div className="relative aspect-[4/5] overflow-hidden bg-sage">
+                    <Image
+                      src={person.photo}
+                      alt={`${person.name}, ${person.role}`}
+                      width={person.photoSize[0]}
+                      height={person.photoSize[1]}
+                      sizes="(min-width: 768px) 560px, 100vw"
+                      className="h-full w-full object-cover object-top"
+                    />
+                  </div>
+                  <div className="mt-6 border-l-4 border-amber pl-5">
+                    <h3 className="text-3xl">{person.name}</h3>
+                    <p className="mt-1 font-display text-base font-semibold text-moss">{person.role}</p>
                   </div>
                   <div className="mt-6 space-y-4 text-lg text-granite">
                     {person.bio.map((paragraph) => (

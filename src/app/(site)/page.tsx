@@ -230,6 +230,30 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Service area */}
+      <section className="container-page py-20 sm:py-28">
+        <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+          <Reveal>
+            <h2 className="text-4xl sm:text-5xl">Proudly serving the Waterloo Region</h2>
+            <p className="mt-6 max-w-xl text-lg text-granite">
+              We build across the whole region, from the cities to the townships. If your property is in Waterloo
+              Region, we will come out for a free consultation.
+            </p>
+          </Reveal>
+          <ul className="flex flex-wrap gap-3">
+            {site.serviceTowns.map((town, i) => (
+              <li key={town}>
+                <Reveal delay={i * 60} variant="scale">
+                  <span className="block border-l-4 border-amber bg-mist px-5 py-3 font-display text-lg font-bold text-evergreen">
+                    {town}
+                  </span>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* Closing call to action */}
       <section className="bg-amber text-ink">
         <div className="container-page flex flex-col items-start justify-between gap-8 py-16 sm:py-20 md:flex-row md:items-center">

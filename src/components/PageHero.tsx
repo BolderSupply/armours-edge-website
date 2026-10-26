@@ -18,6 +18,13 @@ export function PageHero({
   crumbs?: Crumb[];
   children?: ReactNode;
 }) {
+  // Short page names ("About us") get the big treatment; long project titles step down.
+  const size =
+    title.length <= 22
+      ? "text-[clamp(2.5rem,7vw,5.25rem)] uppercase leading-[0.98]"
+      : title.length <= 48
+        ? "text-[clamp(2rem,4.6vw,3.5rem)] uppercase leading-[1.05]"
+        : "text-[clamp(1.75rem,3.6vw,2.75rem)] leading-[1.12]";
   return (
     <section className="relative isolate overflow-hidden bg-evergreen-deep text-paper">
       <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
@@ -44,7 +51,7 @@ export function PageHero({
             </ol>
           </nav>
         )}
-        <h1 className="max-w-4xl text-[clamp(2.5rem,7vw,5.25rem)] uppercase leading-[0.98]">
+        <h1 className={`max-w-4xl ${size}`}>
           {title.split(" ").map((word, i) => (
             <span key={word + i} className="hero-word mr-[0.22em]">
               <span style={{ "--i": i } as React.CSSProperties}>{word}</span>

@@ -29,7 +29,7 @@ Then open `/studio` and sign in with your Sanity login.
 1. Open `/studio` and choose **Project**, then **Create**.
 2. Fill in the title, town, service type and a short summary.
 3. Write **The brief** (what the client wanted) and **The solution** (what we built).
-4. Add a cover photo and 5 to 10 gallery photos.
+4. Add a cover photo, then on the "Before & after, process" tab add before/after pairs and the build stages (each with 1 to 4 photos). Extra finished photos go under "More photos". The project page is rendered by `src/components/project/ProjectShowcase.tsx`.
 5. Tick **Show on the home page** for up to three favourites.
 6. Click **Publish**. The site picks it up within about a minute.
 

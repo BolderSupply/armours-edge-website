@@ -2,14 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { GardenLineArt } from "@/components/GardenLineArt";
 import { PaverPattern } from "@/components/PaverPattern";
-import { ProjectCard } from "@/components/ProjectCard";
+import { RecentProjects } from "@/components/RecentProjects";
 import { Reveal } from "@/components/Reveal";
 import { ServiceIcon } from "@/components/ServiceIcon";
 import { process_steps } from "@/lib/process";
 import { services } from "@/lib/services";
 import { site } from "@/lib/site";
 import { imageUrl } from "@/sanity/image";
-import { getFeaturedProjects, getSiteSettings } from "@/sanity/queries";
+import { getAllProjects, getFeaturedProjects, getSiteSettings } from "@/sanity/queries";
 
 export const revalidate = 60;
 
@@ -31,7 +31,10 @@ const values = [
 ];
 
 export default async function HomePage() {
-  const [featured, settings] = await Promise.all([getFeaturedProjects(), getSiteSettings()]);
+  const [featured, all, settings] = await Promise.all([getFeaturedProjects(), getAllProjects(), getSiteSettings()]);
+  // Projects ticked "Show on the home page" win; otherwise show the newest three.
+  const showcase = featured.length > 0 ? featured : all.slice(0, 3);
+  const latest = all[0];
   const hero = settings?.heroImage?.asset ? settings.heroImage : null;
   const banner = settings?.bannerImage?.asset ? settings.bannerImage : null;
   const words = site.tagline.split(" ");
@@ -80,29 +83,36 @@ export default async function HomePage() {
           </div>
           <div className="bar-grow mt-14" aria-hidden="true" />
         </div>
+        {latest && (
+          <div className="hero-fade pointer-events-none absolute inset-x-0 bottom-10 hidden lg:block" style={{ "--d": "1500ms" } as React.CSSProperties}>
+            <div className="container-page flex justify-end">
+              <Link
+                href={`/projects/${latest.slug}`}
+                className="group pointer-events-auto flex max-w-sm items-center gap-4 border-l-4 border-amber bg-evergreen-deep/80 p-3 pr-5 backdrop-blur transition-colors hover:bg-evergreen-deep"
+              >
+                {latest.coverImage?.asset && (
+                  <span className="relative h-16 w-20 shrink-0 overflow-hidden">
+                    <Image
+                      src={imageUrl(latest.coverImage, 240, 192)}
+                      alt=""
+                      fill
+                      sizes="80px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </span>
+                )}
+                <span className="min-w-0">
+                  <span className="block font-display text-xs font-bold uppercase tracking-[0.14em] text-amber">Latest project</span>
+                  <span className="mt-1 block truncate font-display text-base font-bold text-paper">{latest.title}</span>
+                </span>
+              </Link>
+            </div>
+          </div>
+        )}
       </section>
 
-      {/* Intro with line art */}
-      <section className="container-page grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
-        <div>
-          <Reveal>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl">We build the structures your landscape stands on.</h2>
-          </Reveal>
-          <Reveal delay={120}>
-            <p className="mt-8 max-w-xl text-lg text-granite">
-              Armours Edge was formed on honesty, exceptional quality and innovation. We work with you from the first
-              design conversation to the final stone, so you feel comfortable and confident the whole way, and we stand
-              behind every project we complete.
-            </p>
-          </Reveal>
-          <Reveal delay={220}>
-            <Link href="/about" className="btn btn-line mt-10">
-              About us
-            </Link>
-          </Reveal>
-        </div>
-        <GardenLineArt />
-      </section>
+      {/* Recent projects, right under the hero */}
+      <RecentProjects projects={showcase} />
 
       {/* Services */}
       <section className="bg-mist py-20 sm:py-28">
@@ -141,6 +151,28 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Intro with line art */}
+      <section className="container-page grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+        <div>
+          <Reveal>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl">We build the structures your landscape stands on.</h2>
+          </Reveal>
+          <Reveal delay={120}>
+            <p className="mt-8 max-w-xl text-lg text-granite">
+              Armours Edge was formed on honesty, exceptional quality and innovation. We work with you from the first
+              design conversation to the final stone, so you feel comfortable and confident the whole way, and we stand
+              behind every project we complete.
+            </p>
+          </Reveal>
+          <Reveal delay={220}>
+            <Link href="/about" className="btn btn-line mt-10">
+              About us
+            </Link>
+          </Reveal>
+        </div>
+        <GardenLineArt />
+      </section>
+
       {/* Statement banner */}
       <section className="relative isolate flex min-h-[26rem] items-center justify-center overflow-hidden bg-evergreen-deep py-24 text-center text-paper sm:min-h-[34rem]">
         <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -165,27 +197,8 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
-      {/* Featured projects */}
-      {featured.length > 0 && (
-        <section className="container-page py-20 sm:py-28">
-          <Reveal className="flex flex-wrap items-end justify-between gap-6">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl">Recent work</h2>
-            <Link href="/projects" className="btn btn-line">
-              View all projects
-            </Link>
-          </Reveal>
-          <div className="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-3">
-            {featured.map((project, i) => (
-              <Reveal key={project._id} delay={i * 110}>
-                <ProjectCard project={project} />
-              </Reveal>
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* Process */}
-      <section className={`py-20 sm:py-28 ${featured.length > 0 ? "bg-mist" : ""}`}>
+      <section className="py-20 sm:py-28">
         <div className="container-page">
           <Reveal>
             <h2 className="max-w-3xl text-4xl sm:text-5xl lg:text-6xl">From first visit to finished project</h2>

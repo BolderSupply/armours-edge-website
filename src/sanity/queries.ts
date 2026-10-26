@@ -20,7 +20,14 @@ export type ProjectCard = {
   coverImage?: SanityImage;
 };
 
+export type Highlight = { _key: string; label: string; value: string };
+export type Transformation = { _key: string; label?: string; before?: SanityImage; after?: SanityImage };
+export type Stage = { _key: string; title: string; description?: string; photos?: SanityImage[] };
+
 export type ProjectDetail = ProjectCard & {
+  highlights?: Highlight[];
+  transformations?: Transformation[];
+  stages?: Stage[];
   brief?: PortableTextBlock[];
   solution?: PortableTextBlock[];
   materials?: string[];
@@ -82,6 +89,9 @@ export function getProjectBySlug(slug: string) {
   return safeFetch<ProjectDetail | null>(
     `*[_type == "project" && slug.current == $slug][0]{
       ${cardFields},
+      highlights,
+      transformations,
+      stages,
       brief,
       solution,
       materials,

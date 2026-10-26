@@ -357,3 +357,51 @@ h4 {
 .prose-story li + li {
   margin-top: 0.4em;
 }
+
+/* Project page ------------------------------------------------------ */
+.prose-lead p {
+  margin-top: 1.1rem;
+  font-size: 1.125rem;
+  color: var(--color-granite);
+}
+.prose-lead p:first-child {
+  margin-top: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-ink);
+}
+.prose-lead h3 {
+  margin-top: 1.75rem;
+  font-size: 1.35rem;
+}
+.prose-lead ul {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+  color: var(--color-granite);
+}
+.lightbox-in {
+  animation: lightbox-in 0.25s ease-out both;
+}
+.lightbox-img {
+  animation: lightbox-img 0.35s var(--ease-out-expo) both;
+}
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes lightbox-img {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-in,
+  .lightbox-img {
+    animation: none;
+  }
+}

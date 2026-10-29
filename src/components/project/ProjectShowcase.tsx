@@ -45,7 +45,7 @@ export function ProjectShowcase({ project }: { project: ProjectView }) {
               className="kenburns object-cover"
             />
           ) : (
-            <div className="drift absolute -left-[240px] -top-[88px] h-[calc(100%+88px)] w-[calc(100%+240px)]">
+            <div className="drift absolute left-0 top-0 h-[calc(100%+88px)] w-[calc(100%+240px)]">
               <PaverPattern className="h-full w-full" tones={darkTones} joint="#0e3022" />
             </div>
           )}

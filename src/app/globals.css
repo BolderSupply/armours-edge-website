@@ -405,3 +405,36 @@ h4 {
     animation: none;
   }
 }
+
+/* Hero slideshow ---------------------------------------------------- */
+.hero-zoom {
+  animation: kenburns 12s ease-out both;
+}
+.hero-progress {
+  width: 100%;
+  transform-origin: left;
+  animation-name: hero-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.slide-caption {
+  animation: fade-rise 0.7s var(--ease-out-expo) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-zoom,
+  .slide-caption {
+    animation: none;
+  }
+  .hero-progress {
+    animation: none;
+    transform: scaleX(1);
+  }
+}

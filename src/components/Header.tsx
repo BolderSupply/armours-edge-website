@@ -34,13 +34,9 @@ export function Header({ contact }: { contact: Contact }) {
   const close = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-40">
-      {/* Utility bar */}
-      <div
-        className={`overflow-hidden bg-evergreen-deep text-paper transition-[max-height] duration-500 ease-out ${
-          scrolled ? "max-h-0" : "max-h-14"
-        }`}
-      >
+    <>
+      {/* Utility bar: scrolls away with the page, so nothing ever changes height */}
+      <div className="bg-evergreen-deep text-paper">
         <div className="container-page flex h-11 items-center justify-between gap-4 text-sm">
           <p className="hidden truncate text-sand sm:block">
             Proudly serving {contact.serviceArea}
@@ -66,10 +62,10 @@ export function Header({ contact }: { contact: Contact }) {
       </div>
 
       {/* Main bar */}
-      <div className={`bg-paper transition-shadow duration-300 ${scrolled ? "shadow-[0_8px_30px_-18px_rgb(14_48_34_/_0.5)]" : "border-b border-line"}`}>
-        <div className={`container-page flex items-center justify-between gap-6 transition-[height] duration-300 ${scrolled ? "h-16" : "h-20"}`}>
+      <header className={`sticky top-0 z-40 border-b border-line bg-paper transition-shadow duration-300 ${scrolled ? "shadow-[0_8px_30px_-18px_rgb(14_48_34_/_0.5)]" : ""}`}>
+        <div className="container-page flex h-20 items-center justify-between gap-6">
           <Link href="/" onClick={close} aria-label="Armours Edge Landscape Construction, home">
-            <Logo className={`w-auto transition-[height] duration-300 ${scrolled ? "h-12" : "h-16"}`} />
+            <Logo className="h-16 w-auto" />
           </Link>
 
           <nav aria-label="Main" className="hidden items-center gap-9 lg:flex">
@@ -127,7 +123,6 @@ export function Header({ contact }: { contact: Contact }) {
             </span>
           </button>
         </div>
-      </div>
 
       {/* Mobile menu */}
       {open && (
@@ -167,6 +162,7 @@ export function Header({ contact }: { contact: Contact }) {
           </ul>
         </nav>
       )}
-    </header>
+      </header>
+    </>
   );
 }

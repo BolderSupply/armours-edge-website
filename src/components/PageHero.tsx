@@ -28,7 +28,7 @@ export function PageHero({
   return (
     <section className="relative isolate overflow-hidden bg-evergreen-deep text-paper">
       <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
-        <div className="drift absolute -left-[240px] -top-[88px] h-[calc(100%+88px)] w-[calc(100%+240px)]">
+        <div className="drift absolute left-0 top-0 h-[calc(100%+88px)] w-[calc(100%+240px)]">
           <PaverPattern className="h-full w-full" tones={darkTones} joint="#0e3022" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-evergreen-deep via-evergreen-deep/85 to-evergreen-deep/40" />

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { GardenLineArt } from "@/components/GardenLineArt";
 import { PaverPattern } from "@/components/PaverPattern";
+import { HeroSlideshow, type HeroSlide } from "@/components/HeroSlideshow";
 import { RecentProjects } from "@/components/RecentProjects";
 import { Reveal } from "@/components/Reveal";
 import { ServiceIcon } from "@/components/ServiceIcon";
@@ -32,34 +33,40 @@ const values = [
 
 export default async function HomePage() {
   const [featured, all, settings] = await Promise.all([getFeaturedProjects(), getAllProjects(), getSiteSettings()]);
-  // Projects ticked "Show on the home page" win; otherwise show the newest three.
-  const showcase = featured.length > 0 ? featured : all.slice(0, 3);
-  const latest = all[0];
   const hero = settings?.heroImage?.asset ? settings.heroImage : null;
   const banner = settings?.bannerImage?.asset ? settings.bannerImage : null;
   const words = site.tagline.split(" ");
+  // Projects ticked "Show on the home page" win; otherwise show the newest three.
+  const showcase = featured.length > 0 ? featured : all.slice(0, 3);
+
+  // Hero photos: the photo set in Site settings first, then recent project covers.
+  const slides: HeroSlide[] = [
+    ...(hero ? [{ src: imageUrl(hero, 2400, 1400), alt: hero.alt || "A finished Armours Edge landscape" }] : []),
+    ...all
+      .filter((project) => project.coverImage?.asset)
+      .slice(0, 5)
+      .map((project) => ({
+        src: imageUrl(project.coverImage!, 2400, 1400),
+        alt: project.coverImage?.alt || project.title,
+        title: project.title,
+        href: `/projects/${project.slug}`,
+      })),
+  ];
 
   return (
     <>
       {/* Hero */}
       <section className="relative isolate flex min-h-[max(34rem,calc(100svh-7.75rem))] items-end overflow-hidden bg-evergreen-deep text-paper">
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          {hero ? (
-            <Image
-              src={imageUrl(hero, 2400, 1400)}
-              alt={hero.alt || "A finished Armours Edge landscape"}
-              fill
-              priority
-              sizes="100vw"
-              className="kenburns object-cover"
-            />
-          ) : (
-            <div className="drift absolute -left-[240px] -top-[88px] h-[calc(100%+88px)] w-[calc(100%+240px)]">
+        {slides.length > 0 ? (
+          <HeroSlideshow slides={slides} />
+        ) : (
+          <div className="absolute inset-0 -z-10 overflow-hidden">
+            <div className="drift absolute left-0 top-0 h-[calc(100%+88px)] w-[calc(100%+240px)]">
               <PaverPattern className="h-full w-full" tones={darkTones} joint="#0e3022" />
             </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-evergreen-deep/95 via-evergreen-deep/50 to-evergreen-deep/25" />
-        </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-evergreen-deep/95 via-evergreen-deep/50 to-evergreen-deep/25" />
+          </div>
+        )}
 
         <div className="container-page pb-16 pt-28 sm:pb-24">
           <h1 className="max-w-5xl text-[clamp(2.6rem,6.6vw,5.75rem)] uppercase leading-[0.98]">
@@ -83,32 +90,6 @@ export default async function HomePage() {
           </div>
           <div className="bar-grow mt-14" aria-hidden="true" />
         </div>
-        {latest && (
-          <div className="hero-fade pointer-events-none absolute inset-x-0 bottom-10 hidden lg:block" style={{ "--d": "1500ms" } as React.CSSProperties}>
-            <div className="container-page flex justify-end">
-              <Link
-                href={`/projects/${latest.slug}`}
-                className="group pointer-events-auto flex max-w-sm items-center gap-4 border-l-4 border-amber bg-evergreen-deep/80 p-3 pr-5 backdrop-blur transition-colors hover:bg-evergreen-deep"
-              >
-                {latest.coverImage?.asset && (
-                  <span className="relative h-16 w-20 shrink-0 overflow-hidden">
-                    <Image
-                      src={imageUrl(latest.coverImage, 240, 192)}
-                      alt=""
-                      fill
-                      sizes="80px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  </span>
-                )}
-                <span className="min-w-0">
-                  <span className="block font-display text-xs font-bold uppercase tracking-[0.14em] text-amber">Latest project</span>
-                  <span className="mt-1 block truncate font-display text-base font-bold text-paper">{latest.title}</span>
-                </span>
-              </Link>
-            </div>
-          </div>
-        )}
       </section>
 
       {/* Recent projects, right under the hero */}

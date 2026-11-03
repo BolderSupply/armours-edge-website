@@ -38,12 +38,49 @@ export async function POST(request: Request) {
     return Response.json({ error: "That email address doesn't look right. Please check it and try again." }, { status: 400 });
   }
 
+  // Option 1: Google Sheet + email through a Google Apps Script web app (see README).
+  const sheetUrl = process.env.QUOTE_SHEET_URL;
+  if (sheetUrl) {
+    try {
+      const res = await fetch(sheetUrl, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          secret: process.env.QUOTE_SHEET_SECRET ?? "",
+          name,
+          email,
+          phone,
+          town,
+          service,
+          details,
+        }),
+        redirect: "follow",
+      });
+      const result = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+      if (!res.ok || !result?.ok) {
+        console.error("[quote] The Google Sheet script rejected the request:", res.status, result?.error);
+        return Response.json(
+          { error: `We couldn't send your request just now. Please email ${site.email} directly.` },
+          { status: 502 },
+        );
+      }
+      return Response.json({ ok: true });
+    } catch (error) {
+      console.error("[quote] Could not reach the Google Sheet script:", error);
+      return Response.json(
+        { error: `We couldn't send your request just now. Please email ${site.email} directly.` },
+        { status: 502 },
+      );
+    }
+  }
+
+  // Option 2: email through Resend.
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.QUOTE_TO_EMAIL || site.email;
   const from = process.env.QUOTE_FROM_EMAIL || "Armours Edge Website <onboarding@resend.dev>";
 
   if (!apiKey) {
-    console.warn("[quote] RESEND_API_KEY is not set, so the quote request was not emailed.");
+    console.warn("[quote] Neither QUOTE_SHEET_URL nor RESEND_API_KEY is set, so the quote request was not sent.");
     return Response.json(
       { error: `The quote form isn't connected to email yet. Please email ${site.email} directly.` },
       { status: 503 },

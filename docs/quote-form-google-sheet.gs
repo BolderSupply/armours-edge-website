@@ -20,7 +20,8 @@ function doPost(e) {
       to: NOTIFY_EMAIL,
       replyTo: d.email,
       name: "Armours Edge Website",
-      subject: "Quote request: " + d.service + " in " + d.town,
+      subject: d.subject || "Quote request: " + d.service + " in " + d.town,
+      htmlBody: d.html || undefined,
       body: [
         "New quote request from the website",
         "",

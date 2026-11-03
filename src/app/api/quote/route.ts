@@ -1,4 +1,5 @@
 import { getServiceBySlug } from "@/lib/services";
+import { buildQuoteEmailHtml } from "@/lib/quoteEmail";
 import { site } from "@/lib/site";
 
 type Payload = {
@@ -53,6 +54,8 @@ export async function POST(request: Request) {
           town,
           service,
           details,
+          subject: `Quote request: ${service} in ${town}`,
+          html: buildQuoteEmailHtml({ name, email, phone, town, service, details }),
         }),
         redirect: "follow",
       });
@@ -109,6 +112,7 @@ export async function POST(request: Request) {
       reply_to: email,
       subject: `Quote request: ${service} in ${town}`,
       text,
+      html: buildQuoteEmailHtml({ name, email, phone, town, service, details }),
     }),
   });
 

@@ -35,7 +35,7 @@ const team = [
     ],
   },
   {
-    name: "Pacey",
+    name: "Pacey Camm",
     role: "Lead hand",
     photo: "/team/pacey-v2.webp",
     photoSize: [900, 1125],

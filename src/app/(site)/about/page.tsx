@@ -27,11 +27,21 @@ const team = [
   {
     name: "John Trollope",
     role: "Head foreman and operations manager",
-    photo: "/team/john-trollope.webp",
-    photoSize: [900, 1107],
+    photo: "/team/john-trollope-v2.webp",
+    photoSize: [900, 1125],
     bio: [
       "John started his career in golf course construction in 2000. In 2005 he moved into residential and commercial landscape construction and started A & T Landscaping.",
       "He has worked on projects of every scope and size, and with 24 years of experience he can help you turn any vision into reality. John spends his spare time on the golf course or with his two kids, Kira and Ashton.",
+    ],
+  },
+  {
+    name: "Pacey",
+    role: "Lead hand",
+    photo: "/team/pacey-v2.webp",
+    photoSize: [900, 1125],
+    bio: [
+      "Pacey is a lead hand at Armours Edge and works alongside John and Kyle on almost every project. He keeps the crew moving on site, so each job is built carefully and runs the way it was planned.",
+      "From the first cut to the final cleanup, he is hands-on at every stage of the build and takes pride in the details that make a finished project last.",
     ],
   },
 ];
@@ -69,7 +79,7 @@ export default function AboutPage() {
           <Reveal>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl">Meet the team</h2>
           </Reveal>
-          <div className="mt-14 grid gap-14 md:grid-cols-2">
+          <div className="mt-14 grid gap-14 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
             {team.map((person, i) => (
               <Reveal key={person.name} delay={i * 120}>
                 <article>
@@ -79,7 +89,7 @@ export default function AboutPage() {
                       alt={`${person.name}, ${person.role}`}
                       width={person.photoSize[0]}
                       height={person.photoSize[1]}
-                      sizes="(min-width: 768px) 560px, 100vw"
+                      sizes="(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw"
                       className="h-full w-full object-cover object-top"
                     />
                   </div>

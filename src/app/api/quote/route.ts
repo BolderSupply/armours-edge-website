@@ -55,7 +55,9 @@ export async function POST(request: Request) {
           service,
           details,
           subject: `Quote request: ${service} in ${town}`,
-          html: buildQuoteEmailHtml({ name, email, phone, town, service, details }),
+          // "cid:logo" makes the email use the logo attached inside it, so Gmail shows it without asking.
+          html: buildQuoteEmailHtml({ name, email, phone, town, service, details }, "cid:logo"),
+          logoUrl: `${site.url}/email-logo.png`,
         }),
         redirect: "follow",
       });

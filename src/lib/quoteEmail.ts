@@ -15,7 +15,7 @@ const esc = (value: string) =>
 const FONT = "Archivo, 'Helvetica Neue', Helvetica, Arial, sans-serif";
 
 /** Branded HTML email for a new quote request. Uses tables and inline styles so it renders in Gmail and Outlook. */
-export function buildQuoteEmailHtml(d: QuoteEmailData): string {
+export function buildQuoteEmailHtml(d: QuoteEmailData, logoSrc: string = `${site.url}/email-logo.png`): string {
   const row = (label: string, value: string) => `
     <tr>
       <td style="padding:14px 0;border-bottom:1px solid #d4dcd4;width:120px;vertical-align:top;font:700 11px ${FONT};letter-spacing:1.6px;text-transform:uppercase;color:#54625a;">${label}</td>
@@ -37,7 +37,7 @@ export function buildQuoteEmailHtml(d: QuoteEmailData): string {
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;">
         <tr>
           <td align="center" style="background:#0e3022;padding:32px 24px 28px;">
-            <img src="${site.url}/email-logo.png" width="190" alt="Armours Edge Landscape Construction" style="display:block;width:190px;height:auto;border:0;margin:0 auto 22px;">
+            <img src="${logoSrc}" width="190" alt="Armours Edge Landscape Construction" style="display:block;width:190px;height:auto;border:0;margin:0 auto 22px;">
             <div style="font:800 12px ${FONT};letter-spacing:3px;text-transform:uppercase;color:#e3902c;">New quote request</div>
             <div style="font:800 24px/1.2 ${FONT};color:#ffffff;margin-top:8px;">${esc(d.service)}</div>
           </td>

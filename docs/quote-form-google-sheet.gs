@@ -16,12 +16,11 @@ function doPost(e) {
     }
     sheet.appendRow([new Date(), safe(d.name), safe(d.email), safe(d.phone), safe(d.town), safe(d.service), safe(d.details)]);
 
-    MailApp.sendEmail({
+    const mail = {
       to: NOTIFY_EMAIL,
       replyTo: d.email,
       name: "Armours Edge Website",
       subject: d.subject || "Quote request: " + d.service + " in " + d.town,
-      htmlBody: d.html || undefined,
       body: [
         "New quote request from the website",
         "",
@@ -34,7 +33,17 @@ function doPost(e) {
         "Project details:",
         d.details,
       ].join("\n"),
-    });
+    };
+    if (d.html) {
+      mail.htmlBody = d.html;
+      // Attach the logo inside the email so Gmail shows it without asking.
+      try {
+        if (d.logoUrl) mail.inlineImages = { logo: UrlFetchApp.fetch(d.logoUrl).getBlob().setName("logo.png") };
+      } catch (err) {
+        // If the logo can't be fetched, the email still sends without it.
+      }
+    }
+    MailApp.sendEmail(mail);
     return reply({ ok: true });
   } catch (err) {
     return reply({ ok: false, error: String(err) });

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ColorScene, GardenPlan, HouseElevation, ServiceMap } from "@/components/Sketches";
 import { PaverPattern } from "@/components/PaverPattern";
+import { ProjectCarousel } from "@/components/ProjectCarousel";
 import { HeroSlideshow, type HeroSlide } from "@/components/HeroSlideshow";
 import { RecentProjects } from "@/components/RecentProjects";
 import { Reveal } from "@/components/Reveal";
@@ -30,6 +31,28 @@ const values = [
     body: "2D and 3D designs on request, and sustainable landscapes built to last.",
   },
 ];
+
+function ServiceCard({ service }: { service: (typeof services)[number] }) {
+  return (
+    <Link
+      href={`/services/${service.slug}`}
+      className="lift group flex h-full w-full flex-col border-t-4 border-evergreen bg-paper p-7 transition-colors hover:border-amber"
+    >
+      <ServiceIcon
+        slug={service.slug}
+        className="h-12 w-12 text-evergreen transition-transform duration-500 group-hover:-translate-y-1 group-hover:text-amber-deep"
+      />
+      <h3 className="mt-6 text-xl leading-tight">{service.title}</h3>
+      <p className="mt-3 flex-1 text-base text-granite">{service.summary}</p>
+      <span className="mt-6 inline-flex items-center gap-2 font-display text-sm font-bold uppercase tracking-[0.1em] text-evergreen">
+        Learn more
+        <svg viewBox="0 0 16 10" className="h-2.5 w-4 transition-transform duration-300 group-hover:translate-x-1.5" aria-hidden="true">
+          <path d="M1 5h13M10 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+    </Link>
+  );
+}
 
 export default async function HomePage() {
   const [featured, all, settings] = await Promise.all([getFeaturedProjects(), getAllProjects(), getSiteSettings()]);
@@ -96,7 +119,7 @@ export default async function HomePage() {
       <RecentProjects projects={showcase} />
 
       {/* Services */}
-      <section className="bg-mist py-20 sm:py-28">
+      <section className="overflow-x-clip bg-mist py-20 sm:py-28">
         <div className="container-page">
           <Reveal className="flex flex-wrap items-end justify-between gap-6">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl">What we build</h2>
@@ -104,27 +127,21 @@ export default async function HomePage() {
               All services
             </Link>
           </Reveal>
-          <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Phones and tablets: swipe sideways. Desktop: all eight at once. */}
+          <div className="mt-12 lg:hidden">
+            <ProjectCarousel label="Our services">
+              {services.map((service) => (
+                <li key={service.slug} className="flex w-[80%] shrink-0 snap-start sm:w-[calc((100%-1.25rem)/2.2)]">
+                  <ServiceCard service={service} />
+                </li>
+              ))}
+            </ProjectCarousel>
+          </div>
+          <ul className="mt-14 hidden grid-cols-4 gap-5 lg:grid">
             {services.map((service, i) => (
               <li key={service.slug}>
                 <Reveal delay={(i % 4) * 90} className="h-full">
-                  <Link
-                    href={`/services/${service.slug}`}
-                    className="lift group flex h-full flex-col border-t-4 border-evergreen bg-paper p-7 transition-colors hover:border-amber"
-                  >
-                    <ServiceIcon
-                      slug={service.slug}
-                      className="h-12 w-12 text-evergreen transition-transform duration-500 group-hover:-translate-y-1 group-hover:text-amber-deep"
-                    />
-                    <h3 className="mt-6 text-xl leading-tight">{service.title}</h3>
-                    <p className="mt-3 flex-1 text-base text-granite">{service.summary}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 font-display text-sm font-bold uppercase tracking-[0.1em] text-evergreen">
-                      Learn more
-                      <svg viewBox="0 0 16 10" className="h-2.5 w-4 transition-transform duration-300 group-hover:translate-x-1.5" aria-hidden="true">
-                        <path d="M1 5h13M10 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                  </Link>
+                  <ServiceCard service={service} />
                 </Reveal>
               </li>
             ))}
@@ -134,7 +151,7 @@ export default async function HomePage() {
 
       {/* Design and build */}
       <section className="container-page py-20 sm:py-28">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+        <div className="grid items-center gap-12 grid-cols-[minmax(0,1fr)] lg:grid-cols-[1fr_1.2fr] lg:gap-20">
           <Reveal>
             <h2 className="text-4xl sm:text-5xl">Want it all handled? We design it and we build it.</h2>
             <p className="mt-6 max-w-xl text-lg text-granite">
@@ -145,8 +162,8 @@ export default async function HomePage() {
               Ask about design and build
             </Link>
           </Reveal>
-          <div className="grid items-stretch gap-5 sm:grid-cols-[1fr_auto_1fr]">
-            <Reveal variant="left" className="h-full">
+          <div className="grid grid-cols-[minmax(0,1fr)] items-stretch gap-5 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+            <Reveal variant="up" className="h-full">
               <div className="h-full overflow-hidden border-t-4 border-evergreen bg-mist">
                 <GardenPlan className="h-auto w-full border-b border-line bg-paper text-evergreen" />
                 <div className="p-7">
@@ -162,7 +179,7 @@ export default async function HomePage() {
                 <path d="M1 5h13M10 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <Reveal variant="right" className="h-full">
+            <Reveal variant="up" delay={120} className="h-full">
               <div className="h-full overflow-hidden border-t-4 border-amber bg-mist">
                 <GardenPlan built className="h-auto w-full" />
                 <div className="p-7">

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectShowcase } from "@/components/project/ProjectShowcase";
 import { ProjectCard } from "@/components/ProjectCard";
-import { getServiceBySlug } from "@/lib/services";
 import { toProjectView } from "@/lib/projectView";
 import { imageUrl } from "@/sanity/image";
 import { getProjectBySlug, getProjectSlugs, getRelatedProjects } from "@/sanity/queries";
@@ -38,7 +37,6 @@ export default async function ProjectPage(props: PageProps<"/projects/[slug]">) 
   const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
-  const service = getServiceBySlug(project.serviceType);
   const related = await getRelatedProjects(project.serviceType, project._id);
   const view = toProjectView(project);
 
@@ -49,7 +47,7 @@ export default async function ProjectPage(props: PageProps<"/projects/[slug]">) 
       {related.length > 0 && (
         <section className="bg-mist py-16 sm:py-24">
           <div className="container-page">
-            <h2 className="text-3xl sm:text-4xl">More {service ? service.title.toLowerCase() : "projects"}</h2>
+            <h2 className="text-3xl sm:text-4xl">More projects</h2>
             <div className="mt-10 grid gap-x-8 gap-y-14 md:grid-cols-3">
               {related.map((p) => (
                 <ProjectCard key={p._id} project={p} />

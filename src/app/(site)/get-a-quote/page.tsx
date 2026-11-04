@@ -59,7 +59,7 @@ export default async function QuotePage(props: PageProps<"/get-a-quote">) {
                 {contact.email}
               </a>
             </p>
-            {contact.serviceArea && <p className="mt-3 text-base text-granite">Serving {contact.serviceArea}</p>}
+            {contact.serviceArea && <p className="mt-3 text-base text-granite">Based in Elmira, Ontario. Serving {contact.serviceArea}.</p>}
           </div>
         </Reveal>
         <Reveal delay={120}>

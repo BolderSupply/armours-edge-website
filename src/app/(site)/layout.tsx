@@ -15,7 +15,11 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
     url: site.url,
     email: contact.email,
     ...(contact.phone ? { telephone: contact.phone } : {}),
-    areaServed: { "@type": "AdministrativeArea", name: "Region of Waterloo, Ontario" },
+    address: { "@type": "PostalAddress", addressLocality: "Elmira", addressRegion: "ON", addressCountry: "CA" },
+    areaServed: [
+      { "@type": "AdministrativeArea", name: "Region of Waterloo, Ontario" },
+      { "@type": "AdministrativeArea", name: "Ontario" },
+    ],
     sameAs: [contact.instagram, contact.facebook].filter(Boolean),
   };
 

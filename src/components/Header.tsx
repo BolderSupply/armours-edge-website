@@ -15,6 +15,7 @@ export function Header({ contact }: { contact: Contact }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -31,7 +32,10 @@ export function Header({ contact }: { contact: Contact }) {
   }, [open]);
 
   const isCurrent = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
-  const close = () => setOpen(false);
+  const close = () => {
+    setOpen(false);
+    setServicesOpen(false);
+  };
 
   return (
     <>
@@ -39,7 +43,7 @@ export function Header({ contact }: { contact: Contact }) {
       <div className="bg-evergreen-deep text-paper">
         <div className="container-page flex h-11 items-center justify-between gap-4 text-sm">
           <p className="hidden truncate text-sand sm:block">
-            Proudly serving {contact.serviceArea}
+            Proudly based in Elmira, Ontario
           </p>
           <div className="ml-auto flex items-center gap-5">
             {contact.phone ? (
@@ -65,7 +69,7 @@ export function Header({ contact }: { contact: Contact }) {
       <header className={`sticky top-0 z-40 border-b border-line bg-paper transition-shadow duration-300 ${scrolled ? "shadow-[0_8px_30px_-18px_rgb(14_48_34_/_0.5)]" : ""}`}>
         <div className="container-page flex h-20 items-center justify-between gap-6">
           <Link href="/" onClick={close} aria-label="Armours Edge Landscape Construction, home">
-            <Logo className="h-16 w-auto" />
+            <Logo light={open} className="h-16 w-auto" />
           </Link>
 
           <nav aria-label="Main" className="hidden items-center gap-9 lg:flex">
@@ -110,11 +114,14 @@ export function Header({ contact }: { contact: Contact }) {
 
           <button
             type="button"
-            className="relative flex h-11 w-11 items-center justify-center text-evergreen lg:hidden"
+            className={`relative flex h-11 w-11 items-center justify-center lg:hidden ${open ? "text-paper" : "text-evergreen"}`}
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => {
+              setOpen((v) => !v);
+              setServicesOpen(false);
+            }}
           >
             <span className="relative block h-4 w-7">
               <span className={`absolute left-0 top-0 h-0.5 w-full bg-current transition-all duration-300 ${open ? "top-[7px] rotate-45" : ""}`} />
@@ -134,23 +141,49 @@ export function Header({ contact }: { contact: Contact }) {
           <ul className="container-page flex flex-col pb-16">
             {[{ href: "/services", label: "Services" }, ...nav].map((item, i) => (
               <li key={item.href} className="menu-item border-b border-white/15" style={{ "--i": i } as React.CSSProperties}>
-                <Link
-                  href={item.href}
-                  onClick={close}
-                  className="block py-5 font-display text-3xl font-extrabold uppercase tracking-wide"
-                >
-                  {item.label}
-                </Link>
-                {item.href === "/services" && (
-                  <ul className="grid grid-cols-1 gap-x-6 pb-5 sm:grid-cols-2">
-                    {services.map((s) => (
-                      <li key={s.slug}>
-                        <Link href={`/services/${s.slug}`} onClick={close} className="block py-1.5 text-base text-sand hover:text-amber">
-                          {s.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                {item.href === "/services" ? (
+                  <>
+                    <button
+                      type="button"
+                      aria-expanded={servicesOpen}
+                      aria-controls="mobile-services"
+                      onClick={() => setServicesOpen((v) => !v)}
+                      className="flex w-full items-center justify-between py-5 text-left font-display text-3xl font-extrabold uppercase tracking-wide"
+                    >
+                      {item.label}
+                      <svg
+                        viewBox="0 0 10 6"
+                        className={`h-3 w-5 text-amber transition-transform duration-300 ${servicesOpen ? "rotate-180" : ""}`}
+                        aria-hidden="true"
+                      >
+                        <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                    {servicesOpen && (
+                      <ul id="mobile-services" className="grid grid-cols-1 gap-x-6 pb-5 sm:grid-cols-2">
+                        <li className="sm:col-span-2">
+                          <Link href="/services" onClick={close} className="block py-1.5 text-base font-bold text-amber">
+                            All services
+                          </Link>
+                        </li>
+                        {services.map((s) => (
+                          <li key={s.slug}>
+                            <Link href={`/services/${s.slug}`} onClick={close} className="block py-1.5 text-base text-sand hover:text-amber">
+                              {s.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={close}
+                    className="block py-5 font-display text-3xl font-extrabold uppercase tracking-wide"
+                  >
+                    {item.label}
+                  </Link>
                 )}
               </li>
             ))}

@@ -40,7 +40,7 @@ const team = [
     photo: "/team/pacey-v2.webp",
     photoSize: [900, 1125],
     bio: [
-      "Pacey is a lead hand at Armours Edge and works alongside John and Kyle on almost every project. He keeps the crew moving on site, so each job is built carefully and runs the way it was planned.",
+      "Pacey is a lead hand at Armours Edge and works alongside John and Kyle on almost every project. His steady eye for detail means each job is built carefully and finished the way it was planned.",
       "From the first cut to the final cleanup, he is hands-on at every stage of the build and takes pride in the details that make a finished project last.",
     ],
   },
@@ -69,7 +69,7 @@ export default function AboutPage() {
             landscapes.
           </p>
           <p className="mt-6 text-lg text-granite">
-            We are proud to serve the whole Waterloo Region.
+            We are proudly based in Elmira, Ontario. Most of our work is in the Waterloo Region, and we travel to other locations for the right project.
           </p>
         </Reveal>
       </section>

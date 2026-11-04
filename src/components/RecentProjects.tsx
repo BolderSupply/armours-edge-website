@@ -1,27 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PaverPattern } from "@/components/PaverPattern";
+import { ProjectCarousel } from "@/components/ProjectCarousel";
 import { Reveal } from "@/components/Reveal";
-import { getServiceBySlug } from "@/lib/services";
 import { imageUrl } from "@/sanity/image";
 import type { ProjectCard } from "@/sanity/queries";
 
 const mutedTones = ["#cfd9cb", "#c3cfbf", "#d8e0d3", "#bac7b6", "#dbe3d6"];
 
-function Tile({ project, big, priority }: { project: ProjectCard; big?: boolean; priority?: boolean }) {
-  const service = getServiceBySlug(project.serviceType);
+function Tile({ project, priority }: { project: ProjectCard; priority?: boolean }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className={`group relative block h-full min-h-[19rem] overflow-hidden bg-sage ${big ? "lg:min-h-[38rem]" : ""}`}
+      className="group relative block aspect-[4/5] overflow-hidden bg-evergreen-deep shadow-[0_30px_50px_-28px_rgb(0,0,0,0.7)] ring-1 ring-paper/10 transition-transform duration-500 hover:-translate-y-2"
     >
       {project.coverImage?.asset ? (
         <Image
-          src={imageUrl(project.coverImage, big ? 1600 : 1000, big ? 1200 : 750)}
+          src={imageUrl(project.coverImage, 900, 1125)}
           alt={project.coverImage.alt || project.title}
           fill
           priority={priority}
-          sizes={big ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 1024px) 40vw, 100vw"}
+          sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 85vw"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
         />
       ) : (
@@ -29,12 +28,7 @@ function Tile({ project, big, priority }: { project: ProjectCard; big?: boolean;
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-evergreen-deep/90 via-evergreen-deep/25 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 p-5 text-paper sm:p-7">
-        {service && (
-          <span className="mb-3 inline-block bg-amber px-3 py-1.5 font-display text-xs font-extrabold uppercase tracking-[0.1em] text-ink">
-            {service.title}
-          </span>
-        )}
-        <h3 className={`leading-tight text-paper ${big ? "text-2xl sm:text-4xl" : "text-xl sm:text-2xl"}`}>
+        <h3 className="line-clamp-3 text-lg leading-snug text-paper sm:text-xl">
           {project.title}
         </h3>
         <p className="mt-2 flex items-center gap-3 font-display text-sm font-semibold text-sand">
@@ -51,35 +45,48 @@ function Tile({ project, big, priority }: { project: ProjectCard; big?: boolean;
   );
 }
 
-/** Photo-led strip of finished projects for the home page. */
+const sectionTones = ["#1f5a3b", "#215f3f", "#1b5237", "#246543", "#1e583a"];
+
+/** Swipeable strip of finished projects for the home page. */
 export function RecentProjects({ projects }: { projects: ProjectCard[] }) {
   if (projects.length === 0) return null;
-  const [first, ...rest] = projects;
-  const layout =
-    projects.length === 1 ? "" : projects.length === 2 ? "md:grid-cols-2" : "lg:grid-cols-[1.5fr_1fr] lg:grid-rows-2";
 
   return (
-    <section className="container-page py-16 sm:py-24" aria-labelledby="recent-work">
-      <Reveal className="flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <h2 id="recent-work" className="text-4xl sm:text-5xl lg:text-6xl">Recent work</h2>
-          <p className="mt-3 max-w-xl text-lg text-granite">
-            Finished projects from across the Waterloo Region. Open one to see how it was built, step by step.
-          </p>
-        </div>
-        <Link href="/projects" className="btn btn-line">
-          View all projects
-        </Link>
-      </Reveal>
-      <div className={`mt-10 grid gap-4 sm:gap-5 ${layout}`}>
-        <Reveal variant="scale" className={projects.length > 2 ? "lg:row-span-2" : ""}>
-          <Tile project={first} big={projects.length > 2} priority />
+    <section
+      className="relative isolate overflow-hidden bg-evergreen py-20 text-paper sm:py-28"
+      aria-labelledby="recent-work"
+    >
+      {/* stone texture, fading out towards the bottom */}
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
+        <PaverPattern className="h-full w-full" tones={sectionTones} joint="#17482f" />
+        <div className="absolute inset-0 bg-gradient-to-b from-evergreen/20 via-evergreen/70 to-evergreen-deep" />
+        <div className="absolute inset-x-0 top-0 h-1.5 bg-amber" />
+      </div>
+      <div className="container-page">
+        <Reveal className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <h2 id="recent-work" className="text-4xl text-paper sm:text-5xl lg:text-6xl">Recent work</h2>
+            <div className="mt-5 h-1 w-20 bg-amber" aria-hidden="true" />
+            <p className="mt-5 max-w-xl text-lg text-sand">
+              Finished projects, one swipe at a time. Open one to see how it was built, step by step.
+            </p>
+          </div>
+          <Link href="/projects" className="btn btn-ghost-light">
+            View all projects
+          </Link>
         </Reveal>
-        {rest.map((project, i) => (
-          <Reveal key={project._id} variant="scale" delay={(i + 1) * 120}>
-            <Tile project={project} />
-          </Reveal>
-        ))}
+        <Reveal className="mt-12">
+          <ProjectCarousel label="Recent projects" dark>
+            {projects.map((project, i) => (
+              <li
+                key={project._id}
+                className="w-[82%] shrink-0 snap-start sm:w-[calc((100%-1.25rem)/2.2)] lg:w-[calc((100%-2.5rem)/3)]"
+              >
+                <Tile project={project} priority={i === 0} />
+              </li>
+            ))}
+          </ProjectCarousel>
+        </Reveal>
       </div>
     </section>
   );

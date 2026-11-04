@@ -438,3 +438,21 @@ h4 {
     transform: scaleX(1);
   }
 }
+
+/* Swipe carousel: hide the scrollbar, keep touch scrolling smooth */
+.carousel-track {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Faint drawing-sheet grid for sections that would otherwise be plain white */
+.blueprint {
+  background-image:
+    linear-gradient(to right, rgb(29 86 56 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(29 86 56 / 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+}

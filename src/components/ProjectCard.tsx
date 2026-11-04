@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getServiceBySlug } from "@/lib/services";
 import { imageUrl } from "@/sanity/image";
 import type { ProjectCard as ProjectCardData } from "@/sanity/queries";
 import { PaverPattern } from "./PaverPattern";
@@ -8,7 +7,6 @@ import { PaverPattern } from "./PaverPattern";
 const mutedTones = ["#cfd9cb", "#c3cfbf", "#d8e0d3", "#bac7b6", "#dbe3d6"];
 
 export function ProjectCard({ project, priority = false }: { project: ProjectCardData; priority?: boolean }) {
-  const service = getServiceBySlug(project.serviceType);
   return (
     <article className="group">
       <Link href={`/projects/${project.slug}`} className="block">
@@ -28,11 +26,6 @@ export function ProjectCard({ project, priority = false }: { project: ProjectCar
               tones={mutedTones}
               joint="#aebca9"
             />
-          )}
-          {service && (
-            <span className="absolute bottom-0 left-0 max-w-[85%] truncate bg-amber px-3 py-1.5 font-display text-xs font-extrabold uppercase tracking-[0.1em] text-ink">
-              {service.title}
-            </span>
           )}
         </div>
         <h3 className="mt-5 text-2xl leading-tight transition-colors group-hover:text-evergreen">{project.title}</h3>

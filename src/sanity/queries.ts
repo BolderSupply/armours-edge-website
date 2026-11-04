@@ -71,7 +71,7 @@ export function getAllProjects() {
 
 export function getFeaturedProjects() {
   return safeFetch<ProjectCard[]>(
-    `*[_type == "project" && featured == true && defined(slug.current)] | order(completedOn desc, _createdAt desc)[0...3] {${cardFields}}`,
+    `*[_type == "project" && featured == true && defined(slug.current)] | order(completedOn desc, _createdAt desc)[0...8] {${cardFields}}`,
     {},
     [],
   );
@@ -105,7 +105,7 @@ export function getProjectBySlug(slug: string) {
 
 export function getRelatedProjects(serviceType: string, excludeId: string) {
   return safeFetch<ProjectCard[]>(
-    `*[_type == "project" && serviceType == $serviceType && _id != $excludeId && defined(slug.current)] | order(completedOn desc)[0...3] {${cardFields}}`,
+    `*[_type == "project" && serviceType == $serviceType && _id != $excludeId && defined(slug.current)] | order(completedOn desc)[0...8] {${cardFields}}`,
     { serviceType, excludeId },
     [],
   );

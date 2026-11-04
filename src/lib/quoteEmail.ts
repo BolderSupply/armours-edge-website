@@ -67,7 +67,7 @@ export function buildQuoteEmailHtml(d: QuoteEmailData, logoSrc: string = `${site
         </tr>
         <tr>
           <td align="center" style="background:#0e3022;padding:20px 24px;font:500 11px/1.6 ${FONT};letter-spacing:1.4px;text-transform:uppercase;color:#d3dccf;">
-            Armours Edge Landscape Construction &middot; Waterloo Region, Ontario<br>
+            Armours Edge Landscape Construction &middot; Elmira, Ontario<br>
             <span style="color:#e3902c;">${esc(site.phone)}</span>
           </td>
         </tr>

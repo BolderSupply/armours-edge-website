@@ -28,7 +28,7 @@ export function Footer({ contact }: { contact: Contact }) {
               </a>
             </p>
             {contact.address && <p className="text-sand">{contact.address}</p>}
-            {contact.serviceArea && <p className="text-sand">Serving {contact.serviceArea}</p>}
+            {contact.serviceArea && <p className="text-sand">Proudly based in Elmira, Ontario. Serving {contact.serviceArea}.</p>}
           </address>
           <p className="mt-6 flex gap-6 text-base">
             <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="text-link">

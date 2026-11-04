@@ -5,11 +5,12 @@ export const site = {
   shortName: "Armours Edge",
   tagline: "Where nature meets innovation",
   description:
-    "Armours Edge Landscape Construction builds interlock patios and driveways, retaining walls, steps, water features, fire pits, lighting, irrigation, decks and fences, with excavation and grading, across the Waterloo Region.",
+    "Armours Edge Landscape Construction builds interlock patios and driveways, retaining walls, steps, water features, fire pits, lighting, irrigation, decks and fences, with excavation and grading, from our base in Elmira, Ontario, with most of our work across the Waterloo Region.",
   url: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.armoursedge.ca").replace(/\/$/, ""),
   email: "info@armoursedge.ca",
   phone: "(226) 339-5212",
-  serviceArea: "the Waterloo Region",
+  base: "Elmira, Ontario",
+  serviceArea: "the Waterloo Region and nearby areas",
   // Cities and townships of the Region of Waterloo.
   serviceTowns: ["Kitchener", "Waterloo", "Cambridge", "Woolwich", "Elmira", "Wellesley", "Wilmot", "North Dumfries"],
   instagram: "https://instagram.com/armours_edge",

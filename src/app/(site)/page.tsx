@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { GardenLineArt } from "@/components/GardenLineArt";
+import { ColorScene, GardenPlan, HouseElevation, ServiceMap } from "@/components/Sketches";
 import { PaverPattern } from "@/components/PaverPattern";
 import { HeroSlideshow, type HeroSlide } from "@/components/HeroSlideshow";
 import { RecentProjects } from "@/components/RecentProjects";
@@ -37,7 +37,7 @@ export default async function HomePage() {
   const banner = settings?.bannerImage?.asset ? settings.bannerImage : null;
   const words = site.tagline.split(" ");
   // Projects ticked "Show on the home page" win; otherwise show the newest three.
-  const showcase = featured.length > 0 ? featured : all.slice(0, 3);
+  const showcase = featured.length > 0 ? featured : all.slice(0, 8);
 
   // Hero photos: the photo set in Site settings first, then recent project covers.
   const slides: HeroSlide[] = [
@@ -132,26 +132,76 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Intro with line art */}
-      <section className="container-page grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
-        <div>
+      {/* Design and build */}
+      <section className="container-page py-20 sm:py-28">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
           <Reveal>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl">We build the structures your landscape stands on.</h2>
-          </Reveal>
-          <Reveal delay={120}>
-            <p className="mt-8 max-w-xl text-lg text-granite">
-              Armours Edge was formed on honesty, exceptional quality and innovation. We work with you from the first
-              design conversation to the final stone, so you feel comfortable and confident the whole way, and we stand
-              behind every project we complete.
+            <h2 className="text-4xl sm:text-5xl">Want it all handled? We design it and we build it.</h2>
+            <p className="mt-6 max-w-xl text-lg text-granite">
+              Our design team plans your landscape, and our own crew installs it. One team from the first sketch to the
+              final stone, so nothing gets lost between the drawing and the build.
             </p>
-          </Reveal>
-          <Reveal delay={220}>
-            <Link href="/about" className="btn btn-line mt-10">
-              About us
+            <Link href="/get-a-quote" className="btn btn-amber mt-10">
+              Ask about design and build
             </Link>
           </Reveal>
+          <div className="grid items-stretch gap-5 sm:grid-cols-[1fr_auto_1fr]">
+            <Reveal variant="left" className="h-full">
+              <div className="h-full overflow-hidden border-t-4 border-evergreen bg-mist">
+                <GardenPlan className="h-auto w-full border-b border-line bg-paper text-evergreen" />
+                <div className="p-7">
+                <h3 className="text-2xl">Design</h3>
+                <p className="mt-3 text-base text-granite">
+                  We work with you on the layout, the materials and the look, with 2D and 3D designs on request.
+                </p>
+                </div>
+              </div>
+            </Reveal>
+            <div className="flex items-center justify-center text-amber" aria-hidden="true">
+              <svg viewBox="0 0 16 10" className="h-5 w-8 rotate-90 sm:rotate-0">
+                <path d="M1 5h13M10 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <Reveal variant="right" className="h-full">
+              <div className="h-full overflow-hidden border-t-4 border-amber bg-mist">
+                <GardenPlan built className="h-auto w-full" />
+                <div className="p-7">
+                <h3 className="text-2xl">Build</h3>
+                <p className="mt-3 text-base text-granite">
+                  Our crew installs it to the plan, and we stand behind the work after it is complete.
+                </p>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
-        <GardenLineArt />
+      </section>
+
+      {/* Intro with a full-colour scene */}
+      <section className="relative isolate overflow-hidden bg-mist">
+        <div className="container-page grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+          <div>
+            <Reveal>
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl">We build the structures your landscape stands on.</h2>
+            </Reveal>
+            <Reveal delay={120}>
+              <p className="mt-8 max-w-xl text-lg text-granite">
+                Armours Edge was formed on honesty, exceptional quality and innovation. We work with you from the first
+                design conversation to the final stone, so you feel comfortable and confident the whole way, and we stand
+                behind every project we complete.
+              </p>
+            </Reveal>
+            <Reveal delay={220}>
+              <Link href="/about" className="btn btn-line mt-10">
+                About us
+              </Link>
+            </Reveal>
+          </div>
+          <div className="relative">
+            <div className="absolute -inset-x-4 -bottom-4 top-6 -z-10 bg-sage sm:-inset-x-6 lg:-right-[calc(50vw-50%)]" aria-hidden="true" />
+            <ColorScene className="drop-shadow-[0_24px_30px_rgb(14_48_34_/_0.18)]" />
+          </div>
+        </div>
       </section>
 
       {/* Statement banner */}
@@ -179,7 +229,8 @@ export default async function HomePage() {
       </section>
 
       {/* Process */}
-      <section className="py-20 sm:py-28">
+      <section className="blueprint relative isolate overflow-hidden py-20 sm:py-28">
+        <HouseElevation className="absolute top-3 right-0 -z-10 hidden w-[34rem] max-w-[46%] text-evergreen/30 lg:block" />
         <div className="container-page">
           <Reveal>
             <h2 className="max-w-3xl text-4xl sm:text-5xl lg:text-6xl">From first visit to finished project</h2>
@@ -226,25 +277,35 @@ export default async function HomePage() {
 
       {/* Service area */}
       <section className="container-page py-20 sm:py-28">
-        <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
+          <div>
           <Reveal>
-            <h2 className="text-4xl sm:text-5xl">Proudly serving the Waterloo Region</h2>
+            <h2 className="text-4xl sm:text-5xl">Proudly based in Elmira, Ontario</h2>
             <p className="mt-6 max-w-xl text-lg text-granite">
-              We build across the whole region, from the cities to the townships. If your property is in Waterloo
-              Region, we will come out for a free consultation.
+              Most of our work is in the Waterloo Region, from the cities to the townships. We also travel to other
+              locations for the right project, so wherever your property is, get in touch for a free consultation.
             </p>
           </Reveal>
-          <ul className="flex flex-wrap gap-3">
+          <ul className="mt-8 flex flex-wrap gap-3">
             {site.serviceTowns.map((town, i) => (
               <li key={town}>
                 <Reveal delay={i * 60} variant="scale">
-                  <span className="block border-l-4 border-amber bg-mist px-5 py-3 font-display text-lg font-bold text-evergreen">
+                  <span className="block border-l-4 border-amber bg-mist px-4 py-2 font-display text-base font-bold text-evergreen">
                     {town}
                   </span>
                 </Reveal>
               </li>
             ))}
+            <li>
+              <Reveal delay={site.serviceTowns.length * 60} variant="scale">
+                <span className="block border-l-4 border-evergreen bg-evergreen px-4 py-2 font-display text-base font-bold text-paper">
+                  Other locations, by request
+                </span>
+              </Reveal>
+            </li>
           </ul>
+          </div>
+          <ServiceMap />
         </div>
       </section>
 
